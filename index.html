@@ -89,25 +89,30 @@ button {
 
 .photo {
   position: absolute;
-  width: 320px;
-  border-radius: 16px;
-  animation: zoomFade 3s ease-in-out forwards;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  animation: cinematic 7.5s ease-in-out forwards;
 }
 
-@keyframes zoomFade {
+@keyframes cinematic {
   0% {
-    transform: scale(0.8);
     opacity: 0;
-  }
-  30% {
     transform: scale(1);
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
     opacity: 1;
   }
   100% {
-    transform: scale(1.4);
     opacity: 0;
+    transform: scale(1.15);
   }
 }
+
 </style>
 </head>
 
@@ -209,7 +214,7 @@ function startPhotoShow() {
   document.getElementById("bgMusic").play();
   showNextPhoto();
 
-  photoInterval = setInterval(showNextPhoto, 4000);
+  photoInterval = setInterval(showNextPhoto, 8000);
 }
 
 function showNextPhoto() {

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Birthday Surprise</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  background: linear-gradient(135deg, #fff1eb, #ace0f9);
+}
+
+/* INPUT SCREEN */
+#formScreen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  padding: 14px 20px;
+  margin: 10px;
+  width: 280px;
+  border-radius: 25px;
+  border: none;
+  font-size: 16px;
+}
+
+button {
+  padding: 12px 30px;
+  margin-top: 20px;
+  border-radius: 25px;
+  border: none;
+  font-size: 16px;
+  background: #ff6f91;
+  color: white;
+  cursor: pointer;
+}
+
+/* SURPRISE SCREEN */
+#surpriseScreen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  overflow: hidden;
+}
+
+/* MESSAGE */
+#message {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  text-align: center;
+  font-family: 'Pacifico', cursive;
+  font-size: 48px;
+  color: #ff4e50;
+  z-index: 5;
+}
+
+/* FRUITS */
+.fruit {
+  position: absolute;
+  font-size: 40px;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-100px); opacity: 1; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
+/* PHOTOS */
+.photo {
+  position: absolute;
+  width: 220px;
+  border-radius: 12px;
+  opacity: 0;
+  animation: floatIn 2s forwards;
+}
+
+@keyframes floatIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- INPUT SCREEN -->
+<div id="formScreen">
+  <h2>Just one thing before we begin 💫</h2>
+  <input id="nameInput" placeholder="Enter your name" />
+  <input id="dobInput" type="date" />
+  <button onclick="startSurprise()">Continue</button>
+</div>
+
+<!-- SURPRISE SCREEN -->
+<div id="surpriseScreen">
+  <div id="message"></div>
+
+  <!-- PHOTOS -->
+  <img src="photos/1.jpg" class="photo" style="top:20%; left:10%">
+  <img src="photos/2.jpg" class="photo" style="top:30%; right:10%">
+  <img src="photos/3.jpg" class="photo" style="bottom:20%; left:15%">
+  <img src="photos/4.jpg" class="photo" style="bottom:25%; right:15%">
+
+  <audio id="bgMusic" src="song.mp3"></audio>
+</div>
+
+<script>
+function startSurprise() {
+  const name = document.getElementById("nameInput").value;
+
+  document.getElementById("formScreen").style.display = "none";
+  document.getElementById("surpriseScreen").style.display = "block";
+
+  document.getElementById("message").innerHTML =
+    `Happy Birthday ${name} ❤️<br>To my dearest, my forever`;
+
+  startFruits();
+
+  setTimeout(showPhotosAndMusic, 5000);
+}
+
+function startFruits() {
+  const fruits = ["🍎","🍓","🍉","🍍","🍑","🍒"];
+  for (let i = 0; i < 40; i++) {
+    const fruit = document.createElement("div");
+    fruit.className = "fruit";
+    fruit.innerText = fruits[Math.floor(Math.random() * fruits.length)];
+    fruit.style.left = Math.random() * 100 + "vw";
+    fruit.style.animationDuration = (4 + Math.random() * 4) + "s";
+    document.getElementById("surpriseScreen").appendChild(fruit);
+  }
+}
+
+function showPhotosAndMusic() {
+  document.querySelectorAll(".photo").forEach((p, i) => {
+    p.style.animationDelay = `${i * 0.5}s`;
+  });
+  document.getElementById("bgMusic").play();
+}
+</script>
+
+</body>
+</html>

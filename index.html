@@ -16,7 +16,7 @@ body {
   background: linear-gradient(135deg, #fff1eb, #ace0f9);
 }
 
-/* INPUT SCREEN */
+/* FORM SCREEN */
 #formScreen {
   height: 100vh;
   display: flex;
@@ -61,7 +61,7 @@ button {
   width: 100%;
   text-align: center;
   font-family: 'Pacifico', cursive;
-  font-size: 48px;
+  font-size: 44px;
   color: #ff4e50;
   z-index: 5;
 }
@@ -69,7 +69,7 @@ button {
 /* FRUITS */
 .fruit {
   position: absolute;
-  font-size: 38px;
+  font-size: 36px;
   animation: fall linear infinite;
 }
 
@@ -78,7 +78,7 @@ button {
   100% { transform: translateY(110vh); opacity: 0; }
 }
 
-/* PHOTO ANIMATION */
+/* PHOTO AREA */
 #photoContainer {
   position: absolute;
   inset: 0;
@@ -88,31 +88,22 @@ button {
 }
 
 .photo {
-  position: absolute;
   width: 320px;
   border-radius: 16px;
   animation: zoomFade 3s ease-in-out forwards;
 }
 
 @keyframes zoomFade {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  30% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
+  0%   { transform: scale(0.8); opacity: 0; }
+  30%  { transform: scale(1);   opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
+<!-- FORM -->
 <div id="formScreen">
   <h2>Just one thing before we begin 💫</h2>
   <input id="nameInput" placeholder="Enter your name" />
@@ -120,10 +111,11 @@ button {
   <button onclick="startSurprise()">Continue</button>
 </div>
 
+<!-- SURPRISE -->
 <div id="surpriseScreen">
   <div id="message"></div>
   <div id="photoContainer"></div>
-  <audio id="bgMusic" src="song.mp3" loop></audio> 
+  <audio id="bgMusic" src="song.mp3" preload="auto" loop></audio>
 </div>
 
 <script>
@@ -131,11 +123,11 @@ const correctDOB = "2006-01-02";
 const photos = [
   "photos/1.jpeg",
   "photos/2.jpeg",
-  "photos/3.jpeg",
+  "photos/3.jpeg"
 ];
 
 let photoIndex = 0;
-let photoInterval;
+let photoTimer = null;
 
 function startSurprise() {
   const name = document.getElementById("nameInput").value.trim();
@@ -148,27 +140,30 @@ function startSurprise() {
 
   if (dob !== correctDOB) {
     if (dob < correctDOB) {
-      alert("You are not that old my dear wifey 😌");
+      alert("You are not that young my dear wifey 😌");
     } else {
-      alert("You are not that young my dear wifey 😘");
+      alert("You are not that old my dear wifey 😘");
     }
     return;
   }
 
-  // PLAY MUSIC IMMEDIATELY ON CLICK
-  const music = document.getElementById("bgMusic");
-  music.play().catch(e => console.error("Playback failed:", e));
-
-  // Switch screens
+  // Switch screens FIRST (important for audio)
   document.getElementById("formScreen").style.display = "none";
   document.getElementById("surpriseScreen").style.display = "block";
 
   document.getElementById("message").innerHTML =
     `Happy Birthday baby ${name} ❤️<br>To my cutest baby penguin, my forever`;
 
+  // 🔊 PLAY MUSIC — guaranteed browser-safe
+  const music = document.getElementById("bgMusic");
+  music.currentTime = 0;
+  music.volume = 0.9;
+  music.play().catch(() => {
+    console.log("Audio blocked until interaction");
+  });
+
   startFruits();
-  
-  // Start the photo slideshow after a short delay
+
   setTimeout(startPhotoShow, 5000);
 }
 
@@ -186,7 +181,7 @@ function startFruits() {
 
 function startPhotoShow() {
   showNextPhoto();
-  photoInterval = setInterval(showNextPhoto, 3000);
+  photoTimer = setInterval(showNextPhoto, 3000);
 }
 
 function showNextPhoto() {
@@ -194,16 +189,15 @@ function showNextPhoto() {
   container.innerHTML = "";
 
   if (photoIndex >= photos.length) {
-    clearInterval(photoInterval);
-    // Optional: Reset photoIndex to 0 if you want the photos to loop too
+    clearInterval(photoTimer);
     return;
   }
 
   const img = document.createElement("img");
   img.src = photos[photoIndex];
   img.className = "photo";
-
   container.appendChild(img);
+
   photoIndex++;
 }
 </script>

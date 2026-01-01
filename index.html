@@ -113,7 +113,6 @@ button {
 
 <body>
 
-<!-- INPUT SCREEN -->
 <div id="formScreen">
   <h2>Just one thing before we begin 💫</h2>
   <input id="nameInput" placeholder="Enter your name" />
@@ -121,11 +120,10 @@ button {
   <button onclick="startSurprise()">Continue</button>
 </div>
 
-<!-- SURPRISE SCREEN -->
 <div id="surpriseScreen">
   <div id="message"></div>
   <div id="photoContainer"></div>
-  <audio id="bgMusic" src="song.mp3"></audio>
+  <audio id="bgMusic" src="song.mp3" loop></audio> 
 </div>
 
 <script>
@@ -157,6 +155,11 @@ function startSurprise() {
     return;
   }
 
+  // PLAY MUSIC IMMEDIATELY ON CLICK
+  const music = document.getElementById("bgMusic");
+  music.play().catch(e => console.error("Playback failed:", e));
+
+  // Switch screens
   document.getElementById("formScreen").style.display = "none";
   document.getElementById("surpriseScreen").style.display = "block";
 
@@ -164,9 +167,8 @@ function startSurprise() {
     `Happy Birthday baby ${name} ❤️<br>To my cutest baby penguin, my forever`;
 
   startFruits();
-  const music = document.getElementById("bgMusic");
-  music.muted = true;
-  music.play();
+  
+  // Start the photo slideshow after a short delay
   setTimeout(startPhotoShow, 5000);
 }
 
@@ -183,14 +185,9 @@ function startFruits() {
 }
 
 function startPhotoShow() {
-  const music = document.getElementById("bgMusic");
-  music.muted = false;
-  music.play();
-
   showNextPhoto();
   photoInterval = setInterval(showNextPhoto, 3000);
 }
-
 
 function showNextPhoto() {
   const container = document.getElementById("photoContainer");
@@ -198,6 +195,7 @@ function showNextPhoto() {
 
   if (photoIndex >= photos.length) {
     clearInterval(photoInterval);
+    // Optional: Reset photoIndex to 0 if you want the photos to loop too
     return;
   }
 

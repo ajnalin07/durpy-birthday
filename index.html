@@ -131,10 +131,34 @@ button {
 <script>
 const correctDOB = "2006-01-02";
 const photos = [
-  "photos/1.jpg",
-  "photos/2.jpg",
-  "photos/3.jpg",
-  "photos/4.jpg"
+  "photos/1.jpeg",
+  "photos/2.jpeg",
+  "photos/3.jpeg",
+  "photos/4.jpeg",
+  "photos/5.jpeg",
+  "photos/6.jpeg",
+  "photos/7.jpeg",
+  "photos/8.jpeg",
+  "photos/9.jpeg",
+  "photos/10.jpeg",
+  "photos/11.jpeg",
+  "photos/12.jpeg",
+  "photos/13.jpeg",
+  "photos/14.jpeg",
+  "photos/15.jpeg",
+  "photos/16.jpeg",
+  "photos/17.jpeg",
+  "photos/18.jpeg",
+  "photos/19.jpeg",
+  "photos/20.jpeg",
+  "photos/21.jpeg",
+  "photos/22.jpeg",
+  "photos/23.jpeg",
+  "photos/24.jpeg",
+  "photos/25.jpeg",
+  "photos/26.jpeg",
+  "photos/27.jpeg",
+  "photos/28.jpeg",
 ];
 
 let photoIndex = 0;
@@ -162,11 +186,11 @@ function startSurprise() {
   document.getElementById("surpriseScreen").style.display = "block";
 
   document.getElementById("message").innerHTML =
-    `Happy Birthday ${name} ❤️<br>To my dearest, my forever`;
+    `Happy Birthday ${name} ❤️<br>To my fruity and juicy, my forever`;
 
   startFruits();
 
-  setTimeout(startPhotoShow, 5000);
+  setTimeout(startPhotoShow, 6000);
 }
 
 function startFruits() {
@@ -185,7 +209,7 @@ function startPhotoShow() {
   document.getElementById("bgMusic").play();
   showNextPhoto();
 
-  photoInterval = setInterval(showNextPhoto, 3000);
+  photoInterval = setInterval(showNextPhoto, 4000);
 }
 
 function showNextPhoto() {

@@ -181,11 +181,14 @@ function startFruits() {
 }
 
 function startPhotoShow() {
-  document.getElementById("bgMusic").play();
-  showNextPhoto();
+  const music = document.getElementById("bgMusic");
+  music.muted = false;
+  music.play();
 
+  showNextPhoto();
   photoInterval = setInterval(showNextPhoto, 3000);
 }
+
 
 function showNextPhoto() {
   const container = document.getElementById("photoContainer");

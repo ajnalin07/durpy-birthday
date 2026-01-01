@@ -13,7 +13,7 @@ body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
-  background: linear-gradient(135deg, #fff1eb, #ace0f9);
+  background: black;
 }
 
 /* FORM SCREEN */
@@ -25,80 +25,57 @@ body {
   align-items: center;
 }
 
-input {
-  padding: 14px 20px;
-  margin: 10px;
-  width: 280px;
-  border-radius: 25px;
-  border: none;
-  font-size: 16px;
-}
-
-button {
-  padding: 12px 30px;
-  margin-top: 20px;
-  border-radius: 25px;
-  border: none;
-  font-size: 16px;
-  background: #ff6f91;
-  color: white;
-  cursor: pointer;
-}
-
 /* SURPRISE SCREEN */
 #surpriseScreen {
   display: none;
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  background: black;
   overflow: hidden;
 }
 
 /* MESSAGE */
 #message {
   position: absolute;
-  top: 30px;
-  width: 100%;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-family: 'Pacifico', cursive;
-  font-size: 44px;
-  color: #ff4e50;
-  z-index: 5;
-}
-
-/* FRUITS */
-.fruit {
-  position: absolute;
-  font-size: 36px;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  0% { transform: translateY(-100px); opacity: 1; }
-  100% { transform: translateY(110vh); opacity: 0; }
+  font-size: 42px;
+  color: #ffd6e8;
+  animation: fadeOut 2s ease forwards;
+  animation-delay: 5s;
 }
 
 /* PHOTO AREA */
 #photoContainer {
   position: absolute;
   inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .photo {
-  width: 320px;
-  border-radius: 16px;
-  animation: zoomFade 3s ease-in-out forwards;
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  animation: cinematic 6s ease-in-out forwards;
 }
 
-@keyframes zoomFade {
-  0%   { transform: scale(0.8); opacity: 0; }
-  30%  { transform: scale(1);   opacity: 1; }
-  100% { transform: scale(1.4); opacity: 0; }
+/* ANIMATIONS */
+@keyframes cinematic {
+  0%   { opacity: 0; transform: scale(1); }
+  15%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
 }
 </style>
+
 </head>
 
 <body>
@@ -127,11 +104,12 @@ const photos = [
 ];
 
 let photoIndex = 0;
-let photoTimer = null;
+let photoTimer;
 
+/* STEP 1: Validate & show surprise */
 function startSurprise() {
-  const name = document.getElementById("nameInput").value.trim();
-  const dob = document.getElementById("dobInput").value;
+  const name = nameInput.value.trim();
+  const dob = dobInput.value;
 
   if (!name || !dob) {
     alert("Please fill all details 💕");
@@ -139,53 +117,42 @@ function startSurprise() {
   }
 
   if (dob !== correctDOB) {
-    if (dob < correctDOB) {
-      alert("You are not that young my dear wifey 😌");
-    } else {
-      alert("You are not that old my dear wifey 😘");
-    }
+    alert(
+      dob < correctDOB
+        ? "You are not that young my dear wifey 😌"
+        : "You are not that old my dear wifey 😘"
+    );
     return;
   }
 
-  // Switch screens FIRST (important for audio)
-  document.getElementById("formScreen").style.display = "none";
-  document.getElementById("surpriseScreen").style.display = "block";
+  formScreen.style.display = "none";
+  surpriseScreen.style.display = "block";
 
-  document.getElementById("message").innerHTML =
-    `Happy Birthday baby ${name} ❤️<br>To my cutest baby penguin, my forever`;
+  message.innerHTML =
+    `Happy Birthday baby ${name} ❤️<br><br>
+     To my cutest baby penguin,<br>my forever`;
 
-  // 🔊 PLAY MUSIC — guaranteed browser-safe
-  const music = document.getElementById("bgMusic");
-  music.currentTime = 0;
-  music.volume = 0.9;
-  music.play().catch(() => {
-    console.log("Audio blocked until interaction");
-  });
-
-  startFruits();
-
-  setTimeout(startPhotoShow, 5000);
 }
 
-function startFruits() {
-  const fruits = ["🍎","🍓","🍉","🍍","🍑","🍒"];
-  for (let i = 0; i < 35; i++) {
-    const fruit = document.createElement("div");
-    fruit.className = "fruit";
-    fruit.innerText = fruits[Math.floor(Math.random() * fruits.length)];
-    fruit.style.left = Math.random() * 100 + "vw";
-    fruit.style.animationDuration = (4 + Math.random() * 4) + "s";
-    document.getElementById("surpriseScreen").appendChild(fruit);
-  }
+/* STEP 2: Unlock audio, delay everything */
+function startMusic() {
+  musicBtn.remove();
+
+  setTimeout(() => {
+    bgMusic.play();
+    startPhotoShow();
+  }, 5000);
 }
 
+/* PHOTO SLIDESHOW */
 function startPhotoShow() {
+  message.remove(); // remove text completely
   showNextPhoto();
-  photoTimer = setInterval(showNextPhoto, 3000);
+  photoTimer = setInterval(showNextPhoto, 6000);
 }
 
 function showNextPhoto() {
-  const container = document.getElementById("photoContainer");
+  const container = photoContainer;
   container.innerHTML = "";
 
   if (photoIndex >= photos.length) {
@@ -201,6 +168,7 @@ function showNextPhoto() {
   photoIndex++;
 }
 </script>
+
 
 </body>
 </html>

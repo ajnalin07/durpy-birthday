@@ -164,7 +164,9 @@ function startSurprise() {
     `Happy Birthday baby ${name} ❤️<br>To my cutest baby penguin, my forever`;
 
   startFruits();
-
+  const music = document.getElementById("bgMusic");
+  music.muted = true;
+  music.play();
   setTimeout(startPhotoShow, 5000);
 }
 
